@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Time Capsule
 
-## Getting Started
+Seal messages (optional name, rich text + images) that stay **locked** until an admin imports encrypted JSON with an unlock date.
 
-First, run the development server:
+## Stack
+
+- Next.js (App Router) + TypeScript
+- Tailwind CSS + HeroUI + Lucide
+- Prisma + MongoDB Atlas
+- TipTap editor (images as base64)
+- AES-256-GCM encrypted JSON export/import
+
+## Setup
+
+1. Copy `.env.example` to `.env` and fill in:
+   - `DATABASE_URL` — MongoDB Atlas URI (database `time-capsule`)
+   - `ADMIN_USERNAME` / `ADMIN_PASSWORD`
+   - `SESSION_SECRET` — at least 32 characters
+   - `CAPSULE_EXPORT_KEY` — passphrase for encrypting export files
+
+2. Install and push schema:
 
 ```bash
+npm install
+npx prisma db push
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. Open [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Flow
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Anyone creates a capsule on the home page (no login).
+2. Capsules appear in the vault as **locked** (no body visible).
+3. Admin logs in at `/admin`, exports selected capsules as encrypted `.json`.
+4. Admin imports that JSON and picks an **unlock date**.
+5. After that date, the capsule content (including images) becomes readable.
 
-## Learn More
+## Deploy (Vercel)
 
-To learn more about Next.js, take a look at the following resources:
+1. Push the repo to GitHub.
+2. Import the project in Vercel.
+3. Add the same env vars as `.env`.
+4. Deploy. Run `npx prisma generate` on build (included via `postinstall` if configured).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Scripts
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `npm run dev` — local development
+- `npm run build` — production build
+- `npx prisma db push` — sync schema to MongoDB

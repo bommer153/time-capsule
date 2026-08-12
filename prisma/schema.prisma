@@ -1,0 +1,17 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Capsule {
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  authorName      String?
+  bodyHtml        String
+  createdAt       DateTime  @default(now())
+  unlockAt        DateTime?
+  openedViaImport Boolean   @default(false)
+}
