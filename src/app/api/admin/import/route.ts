@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-import { getAdminSession } from "@/lib/auth";
+import { getAdminSession, roleCan } from "@/lib/auth";
 import { decryptCapsules, type EncryptedCapsuleFile } from "@/lib/crypto";
 import { prisma } from "@/lib/prisma";
 import { sanitizeCapsuleHtml } from "@/lib/sanitize";
@@ -13,8 +13,14 @@ const importMetaSchema = z.object({
 export async function POST(request: Request) {
   try {
     const session = await getAdminSession();
-    if (!session.isAdmin) {
+    if (!session.isAdmin || !session.role) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    if (!roleCan(session.role, "import")) {
+      return NextResponse.json(
+        { error: "Seers only — import & unlock scheduling is a vault power." },
+        { status: 403 },
+      );
     }
 
     const form = await request.formData();
@@ -68,9 +74,14 @@ export async function POST(request: Request) {
     const message = error instanceof Error ? error.message : "Import failed";
     const status = message.includes("Unsupported") || message.includes("auth") ? 400 : 500;
     return NextResponse.json(
-      { error: message.includes("Unsupported") || message.toLowerCase().includes("auth") || message.includes("Invalid")
-          ? "Could not decrypt file. Check CAPSULE_EXPORT_KEY matches the export."
-          : message },
+      {
+        error:
+          message.includes("Unsupported") ||
+          message.toLowerCase().includes("auth") ||
+          message.includes("Invalid")
+            ? "Could not decrypt file. Check CAPSULE_EXPORT_KEY matches the export."
+            : message,
+      },
       { status },
     );
   }

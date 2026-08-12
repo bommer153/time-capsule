@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-import { getAdminSession } from "@/lib/auth";
+import { getAdminSession, roleCan } from "@/lib/auth";
 import { encryptCapsules } from "@/lib/crypto";
 import { prisma } from "@/lib/prisma";
 
@@ -12,8 +12,14 @@ const exportSchema = z.object({
 export async function POST(request: Request) {
   try {
     const session = await getAdminSession();
-    if (!session.isAdmin) {
+    if (!session.isAdmin || !session.role) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    if (!roleCan(session.role, "export")) {
+      return NextResponse.json(
+        { error: "Couriers only — export is locked for Seers." },
+        { status: 403 },
+      );
     }
 
     const json = await request.json().catch(() => ({}));
@@ -50,7 +56,7 @@ export async function POST(request: Request) {
       status: 200,
       headers: {
         "Content-Type": "application/json",
-        "Content-Disposition": `attachment; filename="time-capsule-export-${Date.now()}.json"`,
+        "Content-Disposition": `attachment; filename="bunny-radio-export-${Date.now()}.json"`,
       },
     });
   } catch (error) {

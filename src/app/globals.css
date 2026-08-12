@@ -142,3 +142,9 @@ body {
   list-style: decimal;
   padding-left: 1.25rem;
 }
+
+.game-panel {
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.55) inset,
+    0 18px 40px -28px rgba(236, 72, 153, 0.55);
+}

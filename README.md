@@ -14,7 +14,8 @@ Seal messages (optional name, rich text + images) that stay **locked** until an 
 
 1. Copy `.env.example` to `.env` and fill in:
    - `DATABASE_URL` — MongoDB Atlas URI (database `time-capsule`)
-   - `ADMIN_USERNAME` / `ADMIN_PASSWORD`
+   - `VAULT_ADMIN_USERNAME` / `VAULT_ADMIN_PASSWORD` — Bunny Seer (view sealed + delete + import)
+   - `EXPORT_ADMIN_USERNAME` / `EXPORT_ADMIN_PASSWORD` — Capsule Courier (export + delete)
    - `SESSION_SECRET` — at least 32 characters
    - `CAPSULE_EXPORT_KEY` — passphrase for encrypting export files
 
