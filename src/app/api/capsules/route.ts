@@ -42,7 +42,7 @@ export async function POST(request: Request) {
     }
 
     const authorName = parsed.data.authorName?.trim() || null;
-    const bodyHtml = sanitizeCapsuleHtml(parsed.data.bodyHtml);
+    const bodyHtml = await sanitizeCapsuleHtml(parsed.data.bodyHtml);
 
     if (!bodyHtml.replace(/<[^>]*>/g, "").trim() && !bodyHtml.includes("<img")) {
       return NextResponse.json({ error: "Write a message before sealing." }, { status: 400 });

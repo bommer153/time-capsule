@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 import { toCapsuleMeta } from "@/lib/capsules";
 import { prisma } from "@/lib/prisma";
-import { isCapsuleUnlocked } from "@/lib/sanitize";
+import { isCapsuleUnlocked } from "@/lib/unlock";
 
 type Params = { params: Promise<{ id: string }> };
 

@@ -1,12 +1,12 @@
-import DOMPurify from "isomorphic-dompurify";
-
 const MAX_BODY_CHARS = 12_000_000; // ~keep under MongoDB 16MB with headroom
 const MAX_IMAGE_DATA_URL_CHARS = 1_800_000; // ~1.3MB binary after base64
 
-export function sanitizeCapsuleHtml(dirty: string): string {
+export async function sanitizeCapsuleHtml(dirty: string): Promise<string> {
   if (dirty.length > MAX_BODY_CHARS) {
     throw new Error("Message is too large. Try fewer or smaller images.");
   }
+
+  const { default: DOMPurify } = await import("isomorphic-dompurify");
 
   const clean = DOMPurify.sanitize(dirty, {
     USE_PROFILES: { html: true },
@@ -27,8 +27,4 @@ export function sanitizeCapsuleHtml(dirty: string): string {
   }
 
   return clean;
-}
-
-export function isCapsuleUnlocked(unlockAt: Date | null | undefined, now = new Date()) {
-  return Boolean(unlockAt && unlockAt.getTime() <= now.getTime());
 }

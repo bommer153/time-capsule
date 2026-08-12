@@ -1,16 +1,41 @@
+"use client";
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
-import { AdminLogoutButton } from "@/components/admin-logout-button";
 import { EVENT } from "@/lib/event";
-import { getAdminSession } from "@/lib/session";
 
-export async function SiteHeader() {
-  let isLoggedIn = false;
-  try {
-    const session = await getAdminSession();
-    isLoggedIn = Boolean(session.isAdmin && session.role);
-  } catch {
-    isLoggedIn = false;
+export function SiteHeader() {
+  const router = useRouter();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loggingOut, setLoggingOut] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/admin/me")
+      .then((res) => (res.ok ? res.json() : { isAdmin: false }))
+      .then((data) => {
+        if (!cancelled) setIsLoggedIn(Boolean(data.isAdmin));
+      })
+      .catch(() => {
+        if (!cancelled) setIsLoggedIn(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  async function logout() {
+    setLoggingOut(true);
+    try {
+      await fetch("/api/admin/logout", { method: "POST" });
+      setIsLoggedIn(false);
+      router.push("/admin/login");
+      router.refresh();
+    } finally {
+      setLoggingOut(false);
+    }
   }
 
   return (
@@ -43,7 +68,14 @@ export async function SiteHeader() {
             >
               HQ
             </Link>
-            <AdminLogoutButton />
+            <button
+              type="button"
+              onClick={logout}
+              disabled={loggingOut}
+              className="rounded-full px-3 py-1.5 font-medium text-pink-700 transition hover:bg-pink-500/10 disabled:opacity-60"
+            >
+              Log out
+            </button>
           </>
         ) : (
           <Link

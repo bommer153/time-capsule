@@ -4,7 +4,7 @@ import { ArrowLeft, Lock } from "lucide-react";
 
 import { getCategoryLabel, EVENT } from "@/lib/event";
 import { prisma } from "@/lib/prisma";
-import { isCapsuleUnlocked } from "@/lib/sanitize";
+import { isCapsuleUnlocked } from "@/lib/unlock";
 
 export const dynamic = "force-dynamic";
 

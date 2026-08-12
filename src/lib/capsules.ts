@@ -1,5 +1,5 @@
 import { getCategoryLabel } from "@/lib/event";
-import { isCapsuleUnlocked } from "@/lib/sanitize";
+import { isCapsuleUnlocked } from "@/lib/unlock";
 
 export type CapsuleMeta = {
   id: string;
