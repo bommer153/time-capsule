@@ -47,16 +47,14 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Export file has no capsules" }, { status: 400 });
     }
 
-    const toCreate = await Promise.all(
-      payload.capsules.map(async (capsule) => ({
-        authorName: capsule.authorName?.trim() || null,
-        category: capsule.category || "message",
-        bodyHtml: await sanitizeCapsuleHtml(capsule.bodyHtml),
-        createdAt: capsule.createdAt ? new Date(capsule.createdAt) : new Date(),
-        unlockAt,
-        openedViaImport: true,
-      })),
-    );
+    const toCreate = payload.capsules.map((capsule) => ({
+      authorName: capsule.authorName?.trim() || null,
+      category: capsule.category || "message",
+      bodyHtml: sanitizeCapsuleHtml(capsule.bodyHtml),
+      createdAt: capsule.createdAt ? new Date(capsule.createdAt) : new Date(),
+      unlockAt,
+      openedViaImport: true,
+    }));
 
     const created = await prisma.$transaction(
       toCreate.map((data) => prisma.capsule.create({ data })),
