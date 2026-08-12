@@ -43,7 +43,7 @@ export async function POST(request: Request) {
     const file = encryptCapsules({
       capsules: capsules.map((c) => ({
         authorName: c.authorName,
-        category: c.category,
+        category: c.category ?? "message",
         bodyHtml: c.bodyHtml,
         createdAt: c.createdAt.toISOString(),
       })),
