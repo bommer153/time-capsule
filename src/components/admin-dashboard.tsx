@@ -14,6 +14,7 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { AdminLogoutButton } from "@/components/admin-logout-button";
+import { CourierManager, type CourierRow } from "@/components/courier-manager";
 import type { AdminRole } from "@/lib/roles";
 import { ROLE_META, roleCan } from "@/lib/roles";
 import type { CapsuleMeta } from "@/lib/capsules";
@@ -34,9 +35,11 @@ type Tab = "sealed" | "opened";
 export function AdminDashboard({
   role,
   initialCapsules,
+  initialCouriers = [],
 }: {
   role: AdminRole;
   initialCapsules: AdminCapsule[];
+  initialCouriers?: CourierRow[];
 }) {
   const router = useRouter();
   const meta = ROLE_META[role];
@@ -182,6 +185,10 @@ export function AdminDashboard({
           </div>
         </div>
       </div>
+
+      {roleCan(role, "manage_couriers") ? (
+        <CourierManager initialCouriers={initialCouriers} />
+      ) : null}
 
       {roleCan(role, "import") ? (
         <section className="game-panel rounded-[1.75rem] border-2 border-fuchsia-200 bg-white/80 p-5 sm:p-6">

@@ -1,7 +1,7 @@
 "use client";
 
 import { Button, Input, Label, TextField } from "@heroui/react";
-import { LockKeyhole, Sparkles } from "lucide-react";
+import { LockKeyhole } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
@@ -45,11 +45,9 @@ export function CreateCapsuleForm() {
     if (video) {
       video.currentTime = 0;
       void video.play().catch(() => {
-        // Autoplay blocked — still advance after a short beat
         fallbackTimer = setTimeout(goNext, 1800);
       });
       video.addEventListener("ended", onEnded);
-      // Safety if metadata never fires ended
       fallbackTimer = setTimeout(goNext, 20000);
     } else {
       fallbackTimer = setTimeout(goNext, 1800);
@@ -92,13 +90,10 @@ export function CreateCapsuleForm() {
 
   if (sealing) {
     return (
-      <section id="create" className="relative mx-auto w-full max-w-2xl animate-rise">
-        <div className="rounded-[2rem] border border-pink-200/70 bg-white/80 p-6 text-center shadow-[0_20px_60px_-30px_rgba(236,72,153,0.55)] backdrop-blur-md sm:p-8">
-          <h2 className="font-display text-2xl text-pink-950 sm:text-3xl">Bunny is sealing it…</h2>
-          <p className="mt-2 text-sm text-pink-800/70">
-            Your note is going into the capsule until {EVENT.unlockOnLabel}.
-          </p>
-          <div className="mt-5 overflow-hidden rounded-3xl border border-pink-200/80 bg-pink-50 shadow-inner">
+      <section id="create" className="relative mx-auto w-full max-w-xl animate-rise">
+        <div className="rounded-3xl border border-pink-200/70 bg-white/80 p-5 text-center sm:p-6">
+          <h2 className="font-display text-xl text-pink-950">Sealing…</h2>
+          <div className="mt-4 overflow-hidden rounded-2xl bg-pink-50">
             <video
               ref={videoRef}
               src={SEAL_VIDEO_SRC}
@@ -109,37 +104,26 @@ export function CreateCapsuleForm() {
               preload="auto"
             />
           </div>
-          <p className="mt-3 text-xs text-pink-700/60">Hang tight — hopping you to the sealed page next.</p>
         </div>
       </section>
     );
   }
 
   return (
-    <section id="create" className="relative mx-auto w-full max-w-2xl animate-rise">
-      <div className="rounded-[2rem] border border-pink-200/70 bg-white/70 p-6 shadow-[0_20px_60px_-30px_rgba(236,72,153,0.55)] backdrop-blur-md sm:p-8">
-        <div className="mb-6 flex items-start gap-3">
-          <div className="rounded-2xl bg-pink-500/10 p-3 text-pink-600">
-            <Sparkles className="h-6 w-6" />
-          </div>
-          <div>
-            <h2 className="font-display text-2xl text-pink-950 sm:text-3xl">Seal your anniversary note</h2>
-            <p className="mt-1 text-sm text-pink-900/70">
-              No login needed. Your message opens on Bunny Radio&apos;s {EVENT.unlockOnLabel}{" "}
-              (Aug 12, 2027) after admin import.
-            </p>
-          </div>
-        </div>
+    <section id="create" className="relative mx-auto w-full max-w-xl animate-rise">
+      <div className="rounded-3xl border border-pink-200/70 bg-white/75 p-5 sm:p-6">
+        <h2 className="font-display text-xl text-pink-950">Leave a message</h2>
+        <p className="mt-1 text-sm text-pink-800/65">Opens on the {EVENT.unlockOnLabel}.</p>
 
-        <div className="space-y-5">
+        <div className="mt-5 space-y-4">
           <TextField fullWidth name="authorName" value={authorName} onChange={setAuthorName}>
-            <Label>Your name (optional)</Label>
-            <Input placeholder="Bunny Radio member" />
+            <Label>Name</Label>
+            <Input placeholder="Optional" />
           </TextField>
 
-          <div className="space-y-2">
-            <Label>What kind of message?</Label>
-            <div className="grid gap-2 sm:grid-cols-2">
+          <div className="space-y-1.5">
+            <Label>Type</Label>
+            <div className="flex flex-wrap gap-1.5">
               {MESSAGE_CATEGORIES.map((item) => {
                 const selected = category === item.id;
                 return (
@@ -147,26 +131,24 @@ export function CreateCapsuleForm() {
                     key={item.id}
                     type="button"
                     onClick={() => setCategory(item.id)}
-                    className={`rounded-2xl border px-3 py-3 text-left transition ${
+                    className={`rounded-full px-3 py-1 text-sm transition ${
                       selected
-                        ? "border-pink-400 bg-pink-500 text-white shadow-md shadow-pink-300/40"
-                        : "border-pink-200 bg-white/80 text-pink-950 hover:border-pink-300 hover:bg-pink-50"
+                        ? "bg-pink-500 font-semibold text-white"
+                        : "bg-pink-100/80 text-pink-800 hover:bg-pink-200/80"
                     }`}
                   >
-                    <span className="block text-sm font-semibold">{item.label}</span>
-                    <span
-                      className={`mt-0.5 block text-xs ${selected ? "text-pink-50/90" : "text-pink-800/55"}`}
-                    >
-                      {item.hint}
-                    </span>
+                    {item.label}
                   </button>
                 );
               })}
             </div>
+            <p className="text-xs text-pink-800/60">
+              {MESSAGE_CATEGORIES.find((item) => item.id === category)?.hint}
+            </p>
           </div>
 
-          <div className="space-y-2">
-            <Label>Your message</Label>
+          <div className="space-y-1.5">
+            <Label>Message</Label>
             <CapsuleEditor key={editorKey} value={bodyHtml} onChange={setBodyHtml} />
           </div>
 
@@ -174,15 +156,9 @@ export function CreateCapsuleForm() {
             <p className="rounded-xl bg-rose-50 px-3 py-2 text-sm text-rose-700">{error}</p>
           ) : null}
 
-          <Button
-            fullWidth
-            size="lg"
-            isPending={pending}
-            onPress={onSubmit}
-            className="font-semibold"
-          >
+          <Button fullWidth isPending={pending} onPress={onSubmit}>
             <LockKeyhole className="h-4 w-4" />
-            Seal until 3rd anniversary
+            Seal
           </Button>
         </div>
       </div>

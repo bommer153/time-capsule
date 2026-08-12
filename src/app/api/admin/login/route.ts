@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-import { ROLE_META, getAdminSession, resolveAdminLogin } from "@/lib/auth";
+import { ROLE_META, requireAdminSession, resolveAdminLogin } from "@/lib/auth";
 
 const loginSchema = z.object({
   username: z.string().min(1),
@@ -16,12 +16,12 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Username and password required" }, { status: 400 });
     }
 
-    const account = resolveAdminLogin(parsed.data.username, parsed.data.password);
+    const account = await resolveAdminLogin(parsed.data.username, parsed.data.password);
     if (!account) {
       return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
     }
 
-    const session = await getAdminSession();
+    const session = await requireAdminSession();
     session.isAdmin = true;
     session.role = account.role;
     session.username = account.username;

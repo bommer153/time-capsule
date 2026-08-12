@@ -4,9 +4,8 @@ import Image from "@tiptap/extension-image";
 import Placeholder from "@tiptap/extension-placeholder";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { Bold, ImagePlus, Italic, List, ListOrdered } from "lucide-react";
+import { Bold, ImagePlus, Italic } from "lucide-react";
 import { useEffect } from "react";
-import { Button } from "@heroui/react";
 
 type CapsuleEditorProps = {
   value: string;
@@ -25,10 +24,17 @@ function readFileAsDataUrl(file: File) {
 export function CapsuleEditor({ value, onChange }: CapsuleEditorProps) {
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      StarterKit.configure({
+        bulletList: false,
+        orderedList: false,
+        heading: false,
+        blockquote: false,
+        codeBlock: false,
+        horizontalRule: false,
+      }),
       Image.configure({ allowBase64: true }),
       Placeholder.configure({
-        placeholder: "Write your Bunny Radio anniversary note…",
+        placeholder: "Write your note…",
       }),
     ],
     content: value || "<p></p>",
@@ -36,7 +42,7 @@ export function CapsuleEditor({ value, onChange }: CapsuleEditorProps) {
     editorProps: {
       attributes: {
         class:
-          "capsule-editor min-h-48 max-h-[420px] overflow-y-auto px-4 py-3 focus:outline-none text-[var(--foreground)]",
+          "capsule-editor min-h-36 max-h-72 overflow-y-auto px-3 py-2.5 text-sm text-[var(--foreground)] focus:outline-none",
       },
     },
     onUpdate: ({ editor: current }) => {
@@ -73,47 +79,32 @@ export function CapsuleEditor({ value, onChange }: CapsuleEditorProps) {
   if (!editor) return null;
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-pink-200/80 bg-white/80 shadow-sm backdrop-blur">
-      <div className="flex flex-wrap gap-1 border-b border-pink-100 bg-pink-50/80 p-2">
-        <Button
-          isIconOnly
-          size="sm"
-          variant={editor.isActive("bold") ? "primary" : "ghost"}
-          onPress={() => editor.chain().focus().toggleBold().run()}
+    <div className="overflow-hidden rounded-xl border border-pink-200 bg-white">
+      <div className="flex items-center gap-0.5 border-b border-pink-100 px-1.5 py-1">
+        <button
+          type="button"
+          className={`rounded-md p-1.5 ${editor.isActive("bold") ? "bg-pink-100 text-pink-700" : "text-pink-800/70 hover:bg-pink-50"}`}
+          onClick={() => editor.chain().focus().toggleBold().run()}
           aria-label="Bold"
         >
-          <Bold className="h-4 w-4" />
-        </Button>
-        <Button
-          isIconOnly
-          size="sm"
-          variant={editor.isActive("italic") ? "primary" : "ghost"}
-          onPress={() => editor.chain().focus().toggleItalic().run()}
+          <Bold className="h-3.5 w-3.5" />
+        </button>
+        <button
+          type="button"
+          className={`rounded-md p-1.5 ${editor.isActive("italic") ? "bg-pink-100 text-pink-700" : "text-pink-800/70 hover:bg-pink-50"}`}
+          onClick={() => editor.chain().focus().toggleItalic().run()}
           aria-label="Italic"
         >
-          <Italic className="h-4 w-4" />
-        </Button>
-        <Button
-          isIconOnly
-          size="sm"
-          variant={editor.isActive("bulletList") ? "primary" : "ghost"}
-          onPress={() => editor.chain().focus().toggleBulletList().run()}
-          aria-label="Bullet list"
+          <Italic className="h-3.5 w-3.5" />
+        </button>
+        <button
+          type="button"
+          className="rounded-md p-1.5 text-pink-800/70 hover:bg-pink-50"
+          onClick={addImage}
+          aria-label="Add image"
         >
-          <List className="h-4 w-4" />
-        </Button>
-        <Button
-          isIconOnly
-          size="sm"
-          variant={editor.isActive("orderedList") ? "primary" : "ghost"}
-          onPress={() => editor.chain().focus().toggleOrderedList().run()}
-          aria-label="Numbered list"
-        >
-          <ListOrdered className="h-4 w-4" />
-        </Button>
-        <Button isIconOnly size="sm" variant="ghost" onPress={addImage} aria-label="Add image">
-          <ImagePlus className="h-4 w-4" />
-        </Button>
+          <ImagePlus className="h-3.5 w-3.5" />
+        </button>
       </div>
       <EditorContent editor={editor} />
     </div>

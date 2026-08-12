@@ -11,17 +11,22 @@ import { prisma } from "@/lib/prisma";
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const capsules = await prisma.capsule.findMany({
-    orderBy: { createdAt: "desc" },
-    select: {
-      id: true,
-      authorName: true,
-      category: true,
-      createdAt: true,
-      unlockAt: true,
-      openedViaImport: true,
-    },
-  });
+  const capsules = await prisma.capsule
+    .findMany({
+      orderBy: { createdAt: "desc" },
+      select: {
+        id: true,
+        authorName: true,
+        category: true,
+        createdAt: true,
+        unlockAt: true,
+        openedViaImport: true,
+      },
+    })
+    .catch((error) => {
+      console.error("Failed to load capsules", error);
+      return [];
+    });
 
   return (
     <div className="relative mx-auto w-full max-w-5xl px-6 pb-16">
@@ -93,15 +98,8 @@ export default async function HomePage() {
         <CreateCapsuleForm />
       </div>
 
-      <section id="vault" className="relative z-10 mt-16 scroll-mt-8">
-        <div className="mb-5 flex items-end justify-between gap-3">
-          <div>
-            <h2 className="font-display text-3xl text-pink-950">Anniversary vault</h2>
-            <p className="text-sm text-pink-800/65">
-              Category and name only — messages unlock on the 3rd founding anniversary.
-            </p>
-          </div>
-        </div>
+      <section id="vault" className="relative z-10 mt-14 scroll-mt-8">
+        <h2 className="mb-4 font-display text-2xl text-pink-950">Vault</h2>
         <CapsuleList capsules={capsules.map(toCapsuleMeta)} />
       </section>
     </div>

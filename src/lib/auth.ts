@@ -1,18 +1,14 @@
-import { SessionOptions, getIronSession } from "iron-session";
-import { cookies } from "next/headers";
-
+import { verifyPassword } from "@/lib/password";
+import { prisma } from "@/lib/prisma";
 import { type AdminRole, ROLE_META, roleCan } from "@/lib/roles";
+import { getAdminSession, requireAdminSession } from "@/lib/session";
 
 export type { AdminRole };
 export { ROLE_META, roleCan };
+export type { AdminSession } from "@/lib/session";
+export { getAdminSession, requireAdminSession };
 
-export type AdminSession = {
-  isAdmin?: boolean;
-  role?: AdminRole;
-  username?: string;
-};
-
-export function resolveAdminLogin(
+function resolveEnvAdminLogin(
   username: string,
   password: string,
 ): { role: AdminRole; username: string } | null {
@@ -30,26 +26,30 @@ export function resolveAdminLogin(
   return null;
 }
 
-export function getSessionOptions(): SessionOptions {
-  const password = process.env.SESSION_SECRET;
-  if (!password || password.length < 32) {
-    throw new Error("SESSION_SECRET must be set and at least 32 characters");
-  }
+export async function resolveAdminLogin(
+  username: string,
+  password: string,
+): Promise<{ role: AdminRole; username: string } | null> {
+  const trimmed = username.trim();
+  const envHit = resolveEnvAdminLogin(trimmed, password);
+  if (envHit) return envHit;
 
-  return {
-    cookieName: "time_capsule_admin",
-    password,
-    cookieOptions: {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      maxAge: 60 * 60 * 24 * 7,
-    },
-  };
+  const courier = await prisma.courierAccount.findUnique({
+    where: { username: trimmed.toLowerCase() },
+  });
+  if (!courier) return null;
+  if (!verifyPassword(password, courier.passwordHash)) return null;
+
+  return { role: "export", username: courier.username };
 }
 
-export async function getAdminSession() {
-  return getIronSession<AdminSession>(await cookies(), getSessionOptions());
+export function getReservedUsernames() {
+  return [
+    process.env.VAULT_ADMIN_USERNAME || process.env.ADMIN_USERNAME,
+    process.env.EXPORT_ADMIN_USERNAME,
+  ]
+    .filter(Boolean)
+    .map((name) => String(name).toLowerCase());
 }
 
 export async function requireAdmin(power?: string) {

@@ -61,7 +61,7 @@ export function AdminLoginForm() {
 
         <div className="mb-5 rounded-2xl border border-pink-200 bg-white/80 p-3 text-xs text-pink-800/80">
           <p className="font-black text-pink-700">Your powers</p>
-          <p className="mt-1">Export encrypted JSON · delete capsules</p>
+          <p className="mt-1">Export encrypted JSON · delete capsules · recruit couriers</p>
         </div>
 
         <div className="space-y-4">

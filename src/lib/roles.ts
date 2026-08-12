@@ -11,8 +11,8 @@ export const ROLE_META: Record<
   },
   export: {
     title: "Capsule Courier",
-    tagline: "Export encrypted JSON · delete notes",
-    powers: ["export", "delete"],
+    tagline: "Export encrypted JSON · delete notes · recruit couriers",
+    powers: ["export", "delete", "manage_couriers"],
   },
 };
 

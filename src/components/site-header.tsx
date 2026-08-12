@@ -2,8 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { AdminLogoutButton } from "@/components/admin-logout-button";
-import { getAdminSession } from "@/lib/auth";
 import { EVENT } from "@/lib/event";
+import { getAdminSession } from "@/lib/session";
 
 export async function SiteHeader() {
   const session = await getAdminSession();
