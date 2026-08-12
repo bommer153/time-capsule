@@ -27,6 +27,7 @@ export async function POST(request: Request) {
       orderBy: { createdAt: "asc" },
       select: {
         authorName: true,
+        category: true,
         bodyHtml: true,
         createdAt: true,
       },
@@ -39,6 +40,7 @@ export async function POST(request: Request) {
     const file = encryptCapsules({
       capsules: capsules.map((c) => ({
         authorName: c.authorName,
+        category: c.category,
         bodyHtml: c.bodyHtml,
         createdAt: c.createdAt.toISOString(),
       })),

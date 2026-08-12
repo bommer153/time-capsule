@@ -1,9 +1,10 @@
 import Link from "next/link";
-import { HeartHandshake } from "lucide-react";
+import { PartyPopper } from "lucide-react";
 
 import { CapsuleList } from "@/components/capsule-list";
 import { CreateCapsuleForm } from "@/components/create-capsule-form";
 import { toCapsuleMeta } from "@/lib/capsules";
+import { EVENT } from "@/lib/event";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
@@ -14,6 +15,7 @@ export default async function HomePage() {
     select: {
       id: true,
       authorName: true,
+      category: true,
       createdAt: true,
       unlockAt: true,
       openedViaImport: true,
@@ -25,28 +27,31 @@ export default async function HomePage() {
       <section className="relative mb-14 grid items-center gap-10 pt-6 lg:grid-cols-[1.1fr_0.9fr] lg:pt-10">
         <div className="animate-rise">
           <p className="mb-3 inline-flex items-center gap-2 rounded-full bg-pink-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-pink-700">
-            <HeartHandshake className="h-3.5 w-3.5" />
-            Soft secrets for later
+            <PartyPopper className="h-3.5 w-3.5" />
+            {EVENT.sealedOnLabel} · Aug 12
           </p>
           <h1 className="font-display text-5xl leading-[1.05] text-pink-950 sm:text-6xl lg:text-7xl">
-            Time Capsule
+            {EVENT.brand}
           </h1>
-          <p className="mt-4 max-w-md text-base text-pink-900/75 sm:text-lg">
-            Write a note, tuck in a photo, and seal it. Content stays locked until an admin imports
-            the encrypted JSON with the date it should open.
+          <p className="mt-2 font-display text-2xl text-pink-700/90 sm:text-3xl">Time Capsule</p>
+          <p className="mt-4 max-w-lg text-base text-pink-900/75 sm:text-lg">
+            Members: seal a message for the owner, a colleague, a memory, a thank-you, a wish, a
+            prediction, or the future of Bunny Radio. Everything stays locked until our{" "}
+            <strong className="font-semibold text-pink-800">{EVENT.unlockOnLabel}</strong> —
+            August 12, 2027.
           </p>
           <div className="mt-7 flex flex-wrap gap-3">
             <Link
               href="/#create"
               className="inline-flex items-center rounded-full bg-[var(--accent)] px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-pink-400/40 transition hover:brightness-105"
             >
-              Seal a message
+              Seal your message
             </Link>
             <Link
               href="/#vault"
               className="inline-flex items-center rounded-full border border-pink-300 bg-white/60 px-5 py-2.5 text-sm font-semibold text-pink-800 backdrop-blur transition hover:bg-white"
             >
-              Browse sealed vault
+              View sealed vault
             </Link>
           </div>
         </div>
@@ -56,11 +61,15 @@ export default async function HomePage() {
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="relative flex h-56 w-56 items-center justify-center rounded-[2rem] border border-white/50 bg-white/40 shadow-2xl backdrop-blur-xl sm:h-64 sm:w-64">
               <div className="absolute -right-3 -top-3 rounded-full bg-pink-500 px-3 py-1 text-xs font-bold text-white shadow-lg">
-                SEALED
+                OPENS 2027
               </div>
-              <div className="text-center">
-                <p className="font-display text-4xl text-pink-950">♡</p>
-                <p className="mt-2 text-sm font-medium text-pink-800/80">Your future mail</p>
+              <div className="text-center px-4">
+                <p className="font-display text-5xl text-pink-950">2→3</p>
+                <p className="mt-2 text-sm font-medium text-pink-800/80">
+                  Sealed on our 2nd.
+                  <br />
+                  Opened on our 3rd.
+                </p>
               </div>
             </div>
           </div>
@@ -72,8 +81,10 @@ export default async function HomePage() {
       <section id="vault" className="mt-16 scroll-mt-8">
         <div className="mb-5 flex items-end justify-between gap-3">
           <div>
-            <h2 className="font-display text-3xl text-pink-950">Sealed vault</h2>
-            <p className="text-sm text-pink-800/65">Names and dates only — contents stay hidden while locked.</p>
+            <h2 className="font-display text-3xl text-pink-950">Anniversary vault</h2>
+            <p className="text-sm text-pink-800/65">
+              Category and name only — messages unlock on the 3rd founding anniversary.
+            </p>
           </div>
         </div>
         <CapsuleList capsules={capsules.map(toCapsuleMeta)} />

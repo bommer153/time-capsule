@@ -2,24 +2,29 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 
 import { toCapsuleMeta } from "@/lib/capsules";
+import { MESSAGE_CATEGORY_IDS } from "@/lib/event";
 import { prisma } from "@/lib/prisma";
 import { sanitizeCapsuleHtml } from "@/lib/sanitize";
 
 const createSchema = z.object({
   authorName: z.string().trim().max(80).optional().nullable(),
+  category: z.enum(MESSAGE_CATEGORY_IDS),
   bodyHtml: z.string().min(1, "Write a message before sealing."),
 });
+
+const listSelect = {
+  id: true,
+  authorName: true,
+  category: true,
+  createdAt: true,
+  unlockAt: true,
+  openedViaImport: true,
+} as const;
 
 export async function GET() {
   const capsules = await prisma.capsule.findMany({
     orderBy: { createdAt: "desc" },
-    select: {
-      id: true,
-      authorName: true,
-      createdAt: true,
-      unlockAt: true,
-      openedViaImport: true,
-    },
+    select: listSelect,
   });
 
   return NextResponse.json({ capsules: capsules.map(toCapsuleMeta) });
@@ -46,15 +51,10 @@ export async function POST(request: Request) {
     const capsule = await prisma.capsule.create({
       data: {
         authorName,
+        category: parsed.data.category,
         bodyHtml,
       },
-      select: {
-        id: true,
-        authorName: true,
-        createdAt: true,
-        unlockAt: true,
-        openedViaImport: true,
-      },
+      select: listSelect,
     });
 
     return NextResponse.json({ capsule: toCapsuleMeta(capsule) }, { status: 201 });

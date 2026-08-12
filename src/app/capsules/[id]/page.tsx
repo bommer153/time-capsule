@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Lock, Unlock } from "lucide-react";
 
+import { getCategoryLabel, EVENT } from "@/lib/event";
 import { prisma } from "@/lib/prisma";
 import { isCapsuleUnlocked } from "@/lib/sanitize";
 
@@ -22,7 +23,8 @@ export default async function CapsuleDetailPage({ params }: Props) {
   if (!capsule) notFound();
 
   const unlocked = isCapsuleUnlocked(capsule.unlockAt);
-  const name = capsule.authorName?.trim() || "Anonymous";
+  const name = capsule.authorName?.trim() || "Anonymous member";
+  const categoryLabel = getCategoryLabel(capsule.category);
 
   return (
     <div className="mx-auto w-full max-w-3xl px-6 pb-16 pt-4">
@@ -38,7 +40,10 @@ export default async function CapsuleDetailPage({ params }: Props) {
         <div className="border-b border-pink-100 bg-gradient-to-r from-pink-50 to-rose-50 px-6 py-6 sm:px-8">
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
-              <h1 className="font-display text-3xl text-pink-950 sm:text-4xl">{name}</h1>
+              <p className="text-xs font-semibold uppercase tracking-wide text-pink-600">
+                {categoryLabel}
+              </p>
+              <h1 className="mt-1 font-display text-3xl text-pink-950 sm:text-4xl">{name}</h1>
               <p className="mt-2 text-sm text-pink-800/65">Sealed {formatDate(capsule.createdAt)}</p>
             </div>
             <span
@@ -63,11 +68,11 @@ export default async function CapsuleDetailPage({ params }: Props) {
               <div className="mb-4 rounded-full bg-pink-100 p-5 text-pink-600 animate-pulse-soft">
                 <Lock className="h-10 w-10" />
               </div>
-              <h2 className="font-display text-2xl text-pink-950">Still sealed</h2>
+              <h2 className="font-display text-2xl text-pink-950">Sealed for Bunny Radio</h2>
               <p className="mt-2 max-w-md text-sm text-pink-800/70">
                 {capsule.unlockAt
-                  ? `This capsule opens on ${formatDate(capsule.unlockAt)}.`
-                  : "This capsule has no unlock date yet. An admin must import the encrypted JSON and choose when it opens."}
+                  ? `This note opens on ${formatDate(capsule.unlockAt)} — our ${EVENT.unlockOnLabel}.`
+                  : `This note stays locked until an admin imports it for the ${EVENT.unlockOnLabel} (Aug 12, 2027).`}
               </p>
             </div>
           )}

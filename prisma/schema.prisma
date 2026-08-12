@@ -10,6 +10,7 @@ datasource db {
 model Capsule {
   id              String    @id @default(auto()) @map("_id") @db.ObjectId
   authorName      String?
+  category        String    @default("message")
   bodyHtml        String
   createdAt       DateTime  @default(now())
   unlockAt        DateTime?

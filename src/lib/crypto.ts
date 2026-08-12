@@ -5,6 +5,7 @@ const VERSION = 1;
 export type CapsuleExportPayload = {
   capsules: Array<{
     authorName: string | null;
+    category?: string;
     bodyHtml: string;
     createdAt: string;
   }>;

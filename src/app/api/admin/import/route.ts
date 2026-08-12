@@ -49,6 +49,7 @@ export async function POST(request: Request) {
         prisma.capsule.create({
           data: {
             authorName: capsule.authorName?.trim() || null,
+            category: capsule.category || "message",
             bodyHtml: sanitizeCapsuleHtml(capsule.bodyHtml),
             createdAt: capsule.createdAt ? new Date(capsule.createdAt) : new Date(),
             unlockAt,

@@ -28,7 +28,7 @@ export function CapsuleEditor({ value, onChange }: CapsuleEditorProps) {
       StarterKit,
       Image.configure({ allowBase64: true }),
       Placeholder.configure({
-        placeholder: "Write something for your future self…",
+        placeholder: "Write your Bunny Radio anniversary note…",
       }),
     ],
     content: value || "<p></p>",

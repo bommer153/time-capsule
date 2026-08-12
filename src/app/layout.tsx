@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Fraunces, Nunito } from "next/font/google";
 
 import { SiteHeader } from "@/components/site-header";
+import { EVENT } from "@/lib/event";
 
 import "./globals.css";
 
@@ -17,10 +18,11 @@ const fraunces = Fraunces({
 
 export const metadata: Metadata = {
   title: {
-    default: "Time Capsule",
-    template: "%s · Time Capsule",
+    default: EVENT.title,
+    template: `%s · ${EVENT.brand}`,
   },
-  description: "Seal a message for later. Export encrypted JSON. Import to unlock on a chosen date.",
+  description:
+    "Bunny Radio 2nd founding anniversary time capsule — seal messages to open on the 3rd anniversary.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -32,7 +34,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <SiteHeader />
           <main className="flex-1">{children}</main>
           <footer className="px-6 py-8 text-center text-xs text-pink-900/50">
-            Messages stay sealed until an admin imports them with an unlock date.
+            {EVENT.brand} · Sealed on the {EVENT.sealedOnLabel} · Opens on the {EVENT.unlockOnLabel}{" "}
+            (Aug 12, 2027)
           </footer>
         </div>
       </body>

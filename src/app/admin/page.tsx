@@ -18,6 +18,7 @@ export default async function AdminPage() {
     select: {
       id: true,
       authorName: true,
+      category: true,
       createdAt: true,
       unlockAt: true,
       openedViaImport: true,
