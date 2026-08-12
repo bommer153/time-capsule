@@ -16,10 +16,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
     if (!roleCan(session.role, "export")) {
-      return NextResponse.json(
-        { error: "Couriers only — export is locked for Seers." },
-        { status: 403 },
-      );
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
     const json = await request.json().catch(() => ({}));

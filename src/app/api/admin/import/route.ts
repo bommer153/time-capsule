@@ -17,10 +17,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
     if (!roleCan(session.role, "import")) {
-      return NextResponse.json(
-        { error: "Seers only — import & unlock scheduling is a vault power." },
-        { status: 403 },
-      );
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
     const form = await request.formData();

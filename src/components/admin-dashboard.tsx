@@ -273,7 +273,7 @@ export function AdminDashboard({
           </p>
         ) : (
           <p className="mb-3 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs text-emerald-800">
-            Seer mode: tap Peek to read sealed messages before the anniversary.
+            Vault access: tap Peek to read sealed messages before the anniversary.
           </p>
         )}
 
@@ -360,7 +360,7 @@ export function AdminDashboard({
                   {peek.authorName?.trim() || "Anonymous member"}
                 </h3>
                 <p className="text-xs text-pink-800/60">
-                  {peek.isLocked ? "SEALED — Seer peek" : "OPENED"} · {formatDate(peek.createdAt)}
+                  {peek.isLocked ? "SEALED — private peek" : "OPENED"} · {formatDate(peek.createdAt)}
                 </p>
               </div>
               <Button isIconOnly variant="ghost" onPress={() => setPeek(null)} aria-label="Close">

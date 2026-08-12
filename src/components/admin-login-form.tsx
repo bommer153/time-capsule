@@ -46,20 +46,14 @@ export function AdminLoginForm() {
             <KeyRound className="h-6 w-6" />
           </div>
           <div>
-            <h1 className="font-display text-2xl text-pink-950">Choose your class</h1>
-            <p className="text-sm text-pink-800/65">Sign in as Seer or Courier</p>
+            <h1 className="font-display text-2xl text-pink-950">Capsule Courier</h1>
+            <p className="text-sm text-pink-800/65">Staff login · export & manage capsules</p>
           </div>
         </div>
 
-        <div className="mb-5 grid gap-2 text-xs text-pink-800/80 sm:grid-cols-2">
-          <div className="rounded-2xl border border-pink-200 bg-white/80 p-3">
-            <p className="font-black text-pink-700">Bunny Seer</p>
-            <p className="mt-1">Peek sealed notes · delete · import unlock</p>
-          </div>
-          <div className="rounded-2xl border border-pink-200 bg-white/80 p-3">
-            <p className="font-black text-pink-700">Capsule Courier</p>
-            <p className="mt-1">Export encrypted JSON · delete</p>
-          </div>
+        <div className="mb-5 rounded-2xl border border-pink-200 bg-white/80 p-3 text-xs text-pink-800/80">
+          <p className="font-black text-pink-700">Your powers</p>
+          <p className="mt-1">Export encrypted JSON · delete capsules</p>
         </div>
 
         <div className="space-y-4">
@@ -85,7 +79,7 @@ export function AdminLoginForm() {
           ) : null}
 
           <Button fullWidth isPending={pending} onPress={onSubmit}>
-            Enter the vault
+            Enter HQ
           </Button>
         </div>
       </div>

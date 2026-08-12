@@ -5,8 +5,8 @@ export const ROLE_META: Record<
   { title: string; tagline: string; powers: string[] }
 > = {
   vault: {
-    title: "Bunny Seer",
-    tagline: "Peek inside sealed capsules · delete notes",
+    title: "Vault Access",
+    tagline: "Private vault tools",
     powers: ["view_sealed", "delete", "import"],
   },
   export: {

@@ -13,7 +13,7 @@ export async function GET(_request: Request, { params }: Params) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
     if (!roleCan(session.role, "view_sealed")) {
-      return NextResponse.json({ error: "Seers only — sealed messages are hidden from couriers." }, { status: 403 });
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
     const { id } = await params;
