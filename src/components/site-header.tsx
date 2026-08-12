@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 
 import { AdminLogoutButton } from "@/components/admin-logout-button";
@@ -6,20 +5,25 @@ import { EVENT } from "@/lib/event";
 import { getAdminSession } from "@/lib/session";
 
 export async function SiteHeader() {
-  const session = await getAdminSession();
-  const isLoggedIn = Boolean(session.isAdmin && session.role);
+  let isLoggedIn = false;
+  try {
+    const session = await getAdminSession();
+    isLoggedIn = Boolean(session.isAdmin && session.role);
+  } catch {
+    isLoggedIn = false;
+  }
 
   return (
     <header className="relative z-20 mx-auto flex w-full max-w-5xl items-center justify-between px-6 py-5">
       <Link href="/" className="group flex items-center gap-2.5">
         <span className="relative h-12 w-12 overflow-hidden rounded-2xl shadow-lg shadow-pink-400/30 transition group-hover:rotate-6">
-          <Image
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
             src="/bunny_logo-transparent.png"
             alt={`${EVENT.brand} logo`}
-            fill
-            sizes="48px"
-            className="object-contain"
-            priority
+            width={48}
+            height={48}
+            className="h-12 w-12 object-contain"
           />
         </span>
         <span className="font-display text-2xl tracking-tight text-pink-950">{EVENT.brand}</span>

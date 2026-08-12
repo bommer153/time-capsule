@@ -2,7 +2,6 @@
 
 import { Button, Input, Label, TextField } from "@heroui/react";
 import { KeyRound } from "lucide-react";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -36,13 +35,13 @@ export function AdminLoginForm() {
   return (
     <div className="mx-auto w-full max-w-md">
       <div className="mb-4 flex flex-col items-center gap-2 text-center">
-        <Image
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
           src="/bunny_logo-transparent.png"
           alt="Bunny Radio"
           width={72}
           height={72}
-          className="drop-shadow-md"
-          priority
+          className="h-[72px] w-[72px] object-contain drop-shadow-md"
         />
         <p className="inline-flex items-center rounded-full bg-pink-500 px-3 py-1 text-[11px] font-black uppercase tracking-[0.18em] text-white">
           Bunny Radio HQ

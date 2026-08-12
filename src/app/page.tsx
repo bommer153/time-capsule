@@ -11,8 +11,17 @@ import { prisma } from "@/lib/prisma";
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const capsules = await prisma.capsule
-    .findMany({
+  let capsules: Array<{
+    id: string;
+    authorName: string | null;
+    category: string | null;
+    createdAt: Date;
+    unlockAt: Date | null;
+    openedViaImport: boolean;
+  }> = [];
+
+  try {
+    capsules = await prisma.capsule.findMany({
       orderBy: { createdAt: "desc" },
       select: {
         id: true,
@@ -22,11 +31,10 @@ export default async function HomePage() {
         unlockAt: true,
         openedViaImport: true,
       },
-    })
-    .catch((error) => {
-      console.error("Failed to load capsules", error);
-      return [];
     });
+  } catch (error) {
+    console.error("Failed to load capsules", error);
+  }
 
   return (
     <div className="relative mx-auto w-full max-w-5xl px-6 pb-16">
