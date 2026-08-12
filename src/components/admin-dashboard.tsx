@@ -4,7 +4,6 @@ import { Button, Checkbox, Label } from "@heroui/react";
 import {
   Download,
   Eye,
-  LogOut,
   ScrollText,
   Sparkles,
   Trash2,
@@ -14,6 +13,7 @@ import {
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 
+import { AdminLogoutButton } from "@/components/admin-logout-button";
 import type { AdminRole } from "@/lib/roles";
 import { ROLE_META, roleCan } from "@/lib/roles";
 import type { CapsuleMeta } from "@/lib/capsules";
@@ -67,12 +67,6 @@ export function AdminDashboard({
     } else {
       setSelected((prev) => Array.from(new Set([...prev, ...visible.map((c) => c.id)])));
     }
-  }
-
-  async function logout() {
-    await fetch("/api/admin/logout", { method: "POST" });
-    router.push("/admin/login");
-    router.refresh();
   }
 
   async function exportSelected() {
@@ -184,10 +178,7 @@ export function AdminDashboard({
               <p className="font-display text-2xl text-pink-950">{xp}</p>
               <p className="text-xs text-pink-700/60">{capsules.length} capsules logged</p>
             </div>
-            <Button variant="outline" onPress={logout}>
-              <LogOut className="h-4 w-4" />
-              Leave HQ
-            </Button>
+            <AdminLogoutButton label="Log out" />
           </div>
         </div>
       </div>
