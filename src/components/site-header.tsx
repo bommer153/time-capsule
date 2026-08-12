@@ -1,5 +1,5 @@
+import Image from "next/image";
 import Link from "next/link";
-import { Radio } from "lucide-react";
 
 import { AdminLogoutButton } from "@/components/admin-logout-button";
 import { getAdminSession } from "@/lib/auth";
@@ -11,9 +11,16 @@ export async function SiteHeader() {
 
   return (
     <header className="relative z-20 mx-auto flex w-full max-w-5xl items-center justify-between px-6 py-5">
-      <Link href="/" className="group flex items-center gap-2">
-        <span className="rounded-2xl bg-pink-500 p-2 text-white shadow-lg shadow-pink-400/40 transition group-hover:rotate-6">
-          <Radio className="h-5 w-5" />
+      <Link href="/" className="group flex items-center gap-2.5">
+        <span className="relative h-12 w-12 overflow-hidden rounded-2xl shadow-lg shadow-pink-400/30 transition group-hover:rotate-6">
+          <Image
+            src="/bunny_logo-transparent.png"
+            alt={`${EVENT.brand} logo`}
+            fill
+            sizes="48px"
+            className="object-contain"
+            priority
+          />
         </span>
         <span className="font-display text-2xl tracking-tight text-pink-950">{EVENT.brand}</span>
       </Link>

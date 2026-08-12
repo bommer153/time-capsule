@@ -23,6 +23,13 @@ export const metadata: Metadata = {
   },
   description:
     "Bunny Radio 2nd founding anniversary time capsule — seal messages to open on the 3rd anniversary.",
+  icons: {
+    icon: [
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/bunny_logo-transparent.png", type: "image/png" },
+    ],
+    apple: [{ url: "/bunny-logo-512.png", sizes: "512x512", type: "image/png" }],
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

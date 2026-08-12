@@ -1,7 +1,8 @@
 "use client";
 
 import { Button, Input, Label, TextField } from "@heroui/react";
-import { KeyRound, Rabbit } from "lucide-react";
+import { KeyRound } from "lucide-react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -34,9 +35,16 @@ export function AdminLoginForm() {
 
   return (
     <div className="mx-auto w-full max-w-md">
-      <div className="mb-4 text-center">
-        <p className="inline-flex items-center gap-1 rounded-full bg-pink-500 px-3 py-1 text-[11px] font-black uppercase tracking-[0.18em] text-white">
-          <Rabbit className="h-3.5 w-3.5" />
+      <div className="mb-4 flex flex-col items-center gap-2 text-center">
+        <Image
+          src="/bunny_logo-transparent.png"
+          alt="Bunny Radio"
+          width={72}
+          height={72}
+          className="drop-shadow-md"
+          priority
+        />
+        <p className="inline-flex items-center rounded-full bg-pink-500 px-3 py-1 text-[11px] font-black uppercase tracking-[0.18em] text-white">
           Bunny Radio HQ
         </p>
       </div>
