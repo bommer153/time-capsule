@@ -1,22 +1,12 @@
 import Link from "next/link";
-import nextDynamic from "next/dynamic";
 import { PartyPopper, Sparkles } from "lucide-react";
 
 import { CapsuleList } from "@/components/capsule-list";
+import { CreateCapsuleFormLazy as CreateCapsuleForm } from "@/components/create-capsule-form-lazy";
 import { FloatingBunnies } from "@/components/floating-bunnies";
 import { toCapsuleMeta } from "@/lib/capsules";
 import { EVENT } from "@/lib/event";
 import { prisma } from "@/lib/prisma";
-
-const CreateCapsuleForm = nextDynamic(
-  () => import("@/components/create-capsule-form").then((m) => m.CreateCapsuleForm),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="h-72 animate-pulse rounded-3xl border border-pink-200/70 bg-white/50" />
-    ),
-  },
-);
 
 export const dynamic = "force-dynamic";
 
