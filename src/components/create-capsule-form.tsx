@@ -12,7 +12,13 @@ import {
   type MessageCategoryId,
 } from "@/lib/event";
 
-const SEAL_VIDEO_SRC = "/bunny_sealing_a_message_in_a_c.mp4";
+const DEFAULT_SEAL_VIDEO = "/bunny_sealing_a_message_in_a_c.mp4";
+
+function sealVideoForCategory(category: MessageCategoryId) {
+  if (category === "to_owner") return "/to_athena.mp4";
+  if (category === "wish") return "/wish.mp4";
+  return DEFAULT_SEAL_VIDEO;
+}
 
 export function CreateCapsuleForm() {
   const router = useRouter();
@@ -24,6 +30,7 @@ export function CreateCapsuleForm() {
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
   const [sealing, setSealing] = useState(false);
+  const [sealVideoSrc, setSealVideoSrc] = useState(DEFAULT_SEAL_VIDEO);
   const [nextId, setNextId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -76,6 +83,7 @@ export function CreateCapsuleForm() {
       if (!res.ok) {
         throw new Error(data.error || "Could not seal capsule");
       }
+      setSealVideoSrc(sealVideoForCategory(category));
       setAuthorName("");
       setCategory("message");
       setBodyHtml("<p></p>");
@@ -96,7 +104,8 @@ export function CreateCapsuleForm() {
           <div className="mt-4 overflow-hidden rounded-2xl bg-pink-50">
             <video
               ref={videoRef}
-              src={SEAL_VIDEO_SRC}
+              key={sealVideoSrc}
+              src={sealVideoSrc}
               className="aspect-video w-full object-cover"
               autoPlay
               muted
