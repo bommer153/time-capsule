@@ -16,7 +16,7 @@ const DEFAULT_SEAL_VIDEO = "/bunny_sealing_a_message_in_a_c.mp4";
 
 function sealVideoForCategory(category: MessageCategoryId) {
   if (category === "to_owner") return "/to_athena.mp4";
-  if (category === "wish") return "/wish.mp4";
+  if (category === "wish") return "/wish2.mp4";
   return DEFAULT_SEAL_VIDEO;
 }
 
